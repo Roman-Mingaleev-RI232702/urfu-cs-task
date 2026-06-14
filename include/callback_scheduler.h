@@ -3,7 +3,6 @@
 #include <chrono>
 #include <cstdint>
 #include <functional>
-#include <memory>
 #include <atomic>
 #include <mutex>
 #include <condition_variable>
