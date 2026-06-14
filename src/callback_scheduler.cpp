@@ -4,11 +4,13 @@
 
 using namespace std::chrono_literals;
 
+// Добавляем реализацию конструктора
 CallbackScheduler::CallbackScheduler()
     : workerThread(&CallbackScheduler::workerLoop, this)
 {
 }
 
+// Добавляем реализацию деструктора
 CallbackScheduler::~CallbackScheduler()
 {
     stopFlag = true;
@@ -22,6 +24,14 @@ CallbackScheduler::~CallbackScheduler()
 
 CallbackScheduler::TaskId CallbackScheduler::Schedule(std::function<void()> callback, TimePoint when)
 {
+    // TODO(student): реализуйте планирование и выполнение callback в момент when.
+    //
+    // Минимальные требования:
+    // - callback должен быть вызван не раньше when;
+    // - необходимо поддерживать несколько запланированных callback;
+    // - решение должно быть потокобезопасным;
+    // - метод должен вернуть идентификатор задачи для последующей отмены.
+    
     if (!callback)
     {
         return 0;
@@ -43,6 +53,9 @@ CallbackScheduler::TaskId CallbackScheduler::Schedule(std::function<void()> call
 
 bool CallbackScheduler::Cancel(TaskId id)
 {
+    // TODO(student): отмените задачу по идентификатору id.
+    // Возвращайте true, если задача была найдена и отменена, иначе false.
+    
     std::lock_guard<std::mutex> lock(mutex);
     
     if (currentExecutingId == id)
@@ -54,6 +67,7 @@ bool CallbackScheduler::Cancel(TaskId id)
     return result.second;
 }
 
+// Добавляем реализацию рабочего цикла
 void CallbackScheduler::workerLoop()
 {
     while (true)
